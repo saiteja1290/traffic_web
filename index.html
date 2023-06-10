@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/170875e863.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>signal-violation</title>
+</head>
+
+<body>
+    <div class="start">
+        <h1>Signal Violation Detection System: Real-time Vehicle Detection with OpenCV and YOLO</h1>
+        <h4>*This is not a web demo*</h4>
+    </div>
+    <div class="libraries">
+        <div class="title">OpenCV</div>
+        <div class="des">OpenCV (Open Source Computer Vision Library) is a widely-used open-source computer
+            vision and machine learning library. It offers a vast collection of tools, algorithms, and functions for
+            image and video processing. With support for multiple programming languages, OpenCV enables developers
+            to perform tasks like object detection, face recognition, image filtering, camera calibration, and
+            optical flow analysis. It also provides efficient data structures to handle images and video streams.
+            OpenCV has become a standard choice for researchers, developers, and enthusiasts working on computer
+            vision applications due to its flexibility, speed, and extensive documentation.
+        </div>
+        <div class="title">Yolo</div>
+        <div class="des">YOLO (You Only Look Once) is a state-of-the-art real-time object detection algorithm. It stands
+            out
+            for its ability to achieve high accuracy while maintaining impressive speed. YOLO divides an image
+            into a grid and predicts bounding boxes and class probabilities for each grid cell. By utilizing
+            convolutional neural networks, it achieves end-to-end detection, enabling simultaneous
+            identification of multiple objects in a single pass.
+            YOLO has gained popularity in various
+            applications, including autonomous driving, surveillance systems, and video analysis, due to its
+            efficiency, simplicity, and ability to process images in real-time on resource-constrained devices.
+        </div>
+
+    </div>
+    <div class="codedes">
+        <div class="title">Code Description</div>
+        <div class="des">The code utilizes YOLO object detection and Sort object tracking algorithms to identify traffic
+            signal
+            violations in a given video. It focuses on vehicles and tracks their movements over time. By defining a
+            signal boundary line, it detects when a vehicle crosses the line, indicating a violation. The violator's ID
+            is stored in a text file, and the total number of violations is displayed on the video frame. This system
+            enables real-time monitoring and identification of traffic signal violators, providing authorities with a
+            tool to enhance traffic safety and enforcement.</div>
+    </div>
+      <h2 class="ni">How does the code work?</h2>
+    
+          <h2 class="ni"> Importing libraries - </h2>
+        <ul>
+             ultralytics.YOLO: Imports the YOLO class from the ultralytics library for object detection.</li>
+             cv2: Imports the OpenCV library for image processing.</li>
+             cvzone: Imports the cvzone library, which is not used in the provided code snippet.</li>
+             math: Imports the math module for mathematical operations.</li>
+             sort: Imports the Sort class from the sort library for object tracking.</li>
+        </ul>
+          <h2 class="ni">Class Names - </h2>
+        <ul>
+             The variable classNames is a list containing the names of various object classes that YOLO can
+                detect. The list includes objects like "person", "car", "dog", etc.</li>
+        </ul>
+          <h2 class="ni"> coordinate_checker Function: </h2>
+        <ul>
+             This function takes two parameters cx (x-coordinate of a point) and cy (y-coordinate of a
+                point).</li>
+             It checks if the given point lies on a specified line segment defined by limits.</li>
+             The function calculates the slope of the line segment and compares the coordinates of the given
+                point with the coordinates of the line segment to determine if they lie on the same line.</li>
+             It returns True if the point lies on the line segment, otherwise False.</li>
+        </ul>
+          <h2 class="ni"> Video Capture - </h2>
+        <ul>
+             The code snippet includes the commented lines # cap = cv2.VideoCapture(0) and # cap.set(3,1280)
+                that suggest capturing video from a webcam. However, they are not being used in the current
+                code.</li>
+             Instead, the line cap = cv2.VideoCapture("video3.mp4") captures video from a file named
+                "video3.mp4".</li>
+        </ul>
+          <h2 class="ni"> Object Tracking - </h2>
+        <ul>
+             The line tracker = Sort(max_age=20, min_hits=3, iou_threshold=0.3) initializes an instance of
+                the Sort tracker class for tracking objects.</li>
+             The parameters passed to the Sort class define the maximum age of a track, the minimum number of
+                hits required for a track to be considered valid, and the IoU (Intersection over Union)
+                threshold for track association.</li>
+        </ul>
+          <h2 class="ni"> Model Initialization- </h2>
+        <ul>
+
+             The line model = YOLO('yolov8n.pt') initializes an instance of the YOLO model with the
+                pre-trained weights specified by the file "yolov8n.pt".</li>
+
+        </ul>
+          <h2 class="ni"> Main Loop- </h2>
+        <ul>
+             The code enters a continuous loop with while True: for processing each frame of the video.</li>
+             cap.read() reads the next frame from the video capture.</li>
+             The variable img stores the captured frame.</li>
+             results = model(img, stream=True) performs object detection on the current frame using the YOLO
+                model and returns the detected objects in results.</li>
+        </ul>
+          <h2 class="ni"> Object Detection and Filtering- </h2>
+        <ul>
+             The variable detections is an empty NumPy array used to store the detected vehicle bounding
+                boxes and confidence scores.</li>
+             The code iterates through the detected objects in results and extracts the bounding box
+                coordinates, class index, and confidence score.</li>
+             If the detected object belongs to the "car", "truck", "bus", or "motorbike" class and has a
+                confidence score greater than 0.4, it is considered a vehicle of interest.</li>
+             The bounding box coordinates, confidence score, and class index are stored in the currentarray
+                NumPy array and appended to detections.</li>
+        </ul>
+          <h2 class="ni"> Object Tracking and Signal Violation Detection-</h2> 
+        <ul>
+             resultstracker = tracker.update(detections): The line updates the object tracker with the
+                detected vehicle bounding boxes and confidence scores. It returns the updated tracked results.
+            </li>
+        </ul>
+          <h2 class="ni"> Drawing the line :</h2>
+        <ul>
+             cv2.line(img, (limits[0], limits[1]), (limits[2], limits[3]), (0, 0, 255), 5): This line draws a
+                line on the image frame to represent the signal boundary. The line is defined by the coordinates
+                stored in the limits list.</li>
+        </ul>
+          <h2 class="ni">Object Detection and Filtering:</h2>
+        <ul>
+             The variable <code>detections</code> is an empty NumPy array used to store the detected vehicle
+                bounding boxes and confidence scores.</li>
+             The code iterates through the detected objects in <code>results</code> and extracts the bounding
+                box coordinates, class index, and confidence score.</li>
+             If the detected object belongs to the "car", "truck", "bus", or "motorbike" class and has a
+                confidence score greater than 0.4, it is considered a vehicle of interest.</li>
+             The bounding box coordinates, confidence score, and class index are stored in the
+                <code>currentarray</code> NumPy array and appended to <code>detections</code>.
+            </li>
+        </ul>
+          <h2 class="ni">Object Tracking and Signal Violation Detection:</h2>
+        <ul>
+             The line <code>resultstracker = tracker.update(detections)</code> updates the object tracker
+                with the detected vehicle bounding boxes and confidence scores.</li>
+             The code then processes each tracked result and performs signal violation detection.</li>
+             It starts by drawing a line on the image frame to represent the signal boundary.</li>
+             For each tracked result:</li>
+            <ul>
+                 The bounding box coordinates and unique ID are extracted.</li>
+                 The bounding box is drawn with rounded corners using the <code>cvzone.cornerRect()</code>
+                    function.</li>
+                 The object's ID and class name are displayed using the <code>cvzone.putTextRect()</code>
+                    function.</li>
+                 A circle is drawn at the center of the bounding box.</li>
+                 If the object's center lies within the signal boundary, a signal violation is detected.</li>
+                 The ID of the violating object is stored in a file named "traffic_jam.txt".</li>
+            </ul>
+        </ul>
+        <div class="input_video">
+            <div class="title">Input Video:</div>
+            <br>
+
+            <video src="video3.mp4" controls autoplay>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <h3>It is taken that all cars are jumping signal, but in reality that is not the case. I just considered this scenario for the project sake</h3>
+        <div class="input_video">
+            <div class="title">Output Demo:</div>
+            <br>
+
+            <video src="dmeo.mp4" controls autoplay>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="footer">
+            Created by Sai Teja
+            <br>
+            <br>
+            <a href="https://github.com/saiteja1290/signal-violation/blob/main/car_tracking.py" target="_blank"
+            rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
+            <a href="https://saiteja1290.github.io/portfolio/" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-link"></i></a>
+            <a href="https://www.linkedin.com/in/sai-teja-11403b221/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+</body>
+
+</html>
